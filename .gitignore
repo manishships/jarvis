@@ -1,0 +1,42 @@
+# ============ JARVIS .gitignore ============
+# ---- Secrets: NEVER commit (if a key is ever pushed, revoke it; deleting the commit is not enough) ----
+keys.env
+*.env
+.env
+.env.*
+!keys.env.example
+auth.json
+config_local.py
+
+# ---- Personal data created at runtime ----
+jarvis_memory.db
+*.db
+*.db-wal
+*.db-shm
+*.db-journal
+*.sqlite
+*.sqlite3
+jarvis.log
+jarvis.log.*
+*.log
+browser_profile/
+
+# ---- Local Python environment / bytecode (.pyc files embed C:\Users\<name>\... paths) ----
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+
+# ---- Downloaded or regenerated automatically on first run ----
+models/
+sounds/
+*.part
+
+# ---- OS / editor clutter ----
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+.claude/
