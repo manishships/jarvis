@@ -1,6 +1,6 @@
 # J.A.R.V.I.S. 🤍
 
-**A Hinglish + English voice assistant for Windows.** Talk to it in Hinglish (`JARVIS.bat`) or in English with a British "movie JARVIS" voice (`JARVIS_eng.bat`). It has a study mode (backlog planner, flashcards, board-style quizzes, notes from YouTube lectures), long-term memory, reminders, laptop control, and a Telegram link to your phone. Built as a personal project, pair-programming with Claude and Codex.
+**A Hinglish + English voice assistant for Windows.** Talk to it in Hinglish (`JARVIS.bat`) or in English with a British "movie JARVIS" voice (`JARVIS_eng.bat`). It has a study mode (backlog planner, flashcards, board-style quizzes, notes from YouTube lectures), long-term memory, reminders, laptop control, and a Telegram link to your phone. Built as a personal project.
 
 > Fan project. Not affiliated with Marvel or Disney.
 
