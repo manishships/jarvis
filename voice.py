@@ -7,6 +7,7 @@
 - Sound effects (boot, wake, ack...) - khud bante hain, koi download nahi
 """
 
+import contextlib
 import logging
 import os
 import queue
@@ -318,9 +319,42 @@ def calibrate() -> None:
     print(f"[mic] ready (level {int(_recognizer.energy_threshold)})")
 
 
+DUCK_LEVEL = 0.12  # sunte waqt baaki apps (gaana/video/ad) ki aawaz itni kar do
+
+
+@contextlib.contextmanager
+def ducked():
+    """Sunte waqt gaana/video/ad dheema - warna mic speaker ki aawaz ko user ki baat samajh leta hai (Alexa jaisa)."""
+    lowered = []
+    try:
+        import comtypes
+        from pycaw.pycaw import AudioUtilities
+
+        comtypes.CoInitialize()
+        for s in AudioUtilities.GetAllSessions():
+            if s.Process is None or s.ProcessId == os.getpid():
+                continue  # system sounds aur JARVIS ki apni aawaz nahi
+            vol = s.SimpleAudioVolume
+            before = vol.GetMasterVolume()
+            if before > DUCK_LEVEL:
+                vol.SetMasterVolume(DUCK_LEVEL, None)
+                lowered.append((vol, before))
+    except Exception:
+        log.debug("duck failed", exc_info=True)
+    try:
+        yield
+    finally:
+        for vol, before in lowered:
+            try:
+                if abs(vol.GetMasterVolume() - DUCK_LEVEL) < 0.01:  # user ne beech me khud nahi badla to wapas
+                    vol.SetMasterVolume(before, None)
+            except Exception:
+                pass
+
+
 def listen(language: str, report_silence: bool = True, timeout: float = 10, groq_key: str = "") -> str | None:
     """Mic se ek baat suno aur text me badlo. Groq key ho to Whisper (Hinglish Roman me), warna Google. Na samjhe to None."""
-    with sr.Microphone() as source:
+    with ducked(), sr.Microphone() as source:
         print(">> Sun raha hoon... ab bolo")
         try:
             audio = _recognizer.listen(source, timeout=timeout, phrase_time_limit=90)  # lambi baat bhi poori suno
